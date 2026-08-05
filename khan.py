@@ -1,17 +1,23 @@
-echo -n "Apna API ID daalein (Numbers only): " && read MY_API_ID && \
-echo -n "Apna API HASH daalein: " && read MY_API_HASH && \
-cat << EOF > run.py
+import asyncio
 import os
 import uvicorn
 from fastapi import FastAPI, Form, Header
 from fastapi.responses import HTMLResponse, StreamingResponse, RedirectResponse
 from pyrogram import Client
-from pyrogram.errors import SessionPasswordNeeded, FloodWait, PhoneNumberInvalid, PhoneCodeInvalid, ApiIdInvalid
+from pyrogram.errors import SessionPasswordNeeded
+
+# Python 3.14 Event Loop Fix
+try:
+    asyncio.get_event_loop()
+except RuntimeError:
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
 app = FastAPI()
 
-API_ID = $MY_API_ID
-API_HASH = "$MY_API_HASH"
+# Credentials Render Environment Variables से रीड होंगे
+API_ID = int(os.environ.get("API_ID", "0"))
+API_HASH = os.environ.get("API_HASH", "")
 
 tg_client = None
 auth_data = {}
@@ -295,5 +301,5 @@ async def stream_video(chat_id: str, message_id: int, range: str = Header(None))
         return HTMLResponse(f"Streaming error: {e}", status_code=500)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=5000)
-EOF
+    port = int(os.environ.get("PORT", 5000))
+    uvicorn.run("run:app", host="0.0.0.0", port=port)
