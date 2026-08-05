@@ -1,30 +1,25 @@
-import nest_asyncio
 import asyncio
 import os
 from pyrogram import Client
 from fastapi import FastAPI
 
-# Python 3.14 + Pyrogram Event Loop Fix
-nest_asyncio.apply()
+# Python 3.14 Event Loop Fix (इसे सबसे ऊपर रहना जरूरी है)
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 
-try:
-    asyncio.get_event_loop()
-except RuntimeError:
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-# Render Web Service को एक्टिव रखने के लिए FastAPI Setup
+# FastAPI Setup (Render Web Service के लिए)
 app = FastAPI()
 
 @app.get("/")
 def read_root():
     return {"status": "Bot is running online!"}
 
-# Telegram Bot Credentials (अपनी जानकारी यहाँ भरें)
-API_ID = 1234567               # अपना API ID (Integer) यहाँ लिखें
-API_HASH = "your_api_hash"      # अपना API Hash यहाँ लिखें
-BOT_TOKEN = "your_bot_token"    # अपना Bot Token यहाँ लिखें
+# Telegram Bot Credentials (यहाँ अपनी सही जानकारी भरें)
+API_ID = 1234567                # अपना API ID (संख्या) डालें
+API_HASH = "your_api_hash"       # अपना API Hash डालें
+BOT_TOKEN = "your_bot_token"     # अपना Bot Token डालें
 
+# Pyrogram Client Setup
 bot = Client(
     "my_bot",
     api_id=API_ID,
