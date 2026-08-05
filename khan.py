@@ -1,5 +1,4 @@
 import os
-import uvicorn
 from fastapi import FastAPI, Form, Header
 from fastapi.responses import HTMLResponse, StreamingResponse, RedirectResponse
 from pyrogram import Client
@@ -291,8 +290,3 @@ async def stream_video(chat_id: str, message_id: int, range: str = Header(None))
         )
     except Exception as e:
         return HTMLResponse(f"Streaming error: {e}", status_code=500)
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
-    
