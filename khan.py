@@ -1,4 +1,3 @@
-import asyncio
 import os
 import uvicorn
 from fastapi import FastAPI, Form, Header
@@ -6,16 +5,9 @@ from fastapi.responses import HTMLResponse, StreamingResponse, RedirectResponse
 from pyrogram import Client
 from pyrogram.errors import SessionPasswordNeeded
 
-# Python 3.14 Event Loop Fix
-try:
-    asyncio.get_event_loop()
-except RuntimeError:
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
 app = FastAPI()
 
-# Credentials Render Environment Variables से रीड होंगे
+# Credentials Render Environment Variables से ऑटो-रीड होंगे
 API_ID = int(os.environ.get("API_ID", "0"))
 API_HASH = os.environ.get("API_HASH", "")
 
@@ -218,7 +210,7 @@ async def get_chat_videos(chat_id: str):
                 fname = getattr(media, "file_name", None) or f"Video_{msg.id}.mp4"
                 if msg.video or "video" in mime or fname.lower().endswith(('.mp4', '.mkv', '.avi', '.webm')):
                     count += 1
-                    intent_url = f"intent://127.0.0.1:5000/stream/{chat_id}/{msg.id}#Intent;scheme=http;type=video/*;end"
+                    intent_url = f"intent://127.0.0.1:10000/stream/{chat_id}/{msg.id}#Intent;scheme=http;type=video/*;end"
                     html += f"""
                     <div style="background:#0f172a; border-radius:12px; padding:12px; margin-bottom:12px; border:1px solid #1e40af44; display:flex; justify-content:space-between; align-items:center;">
                         <div style="width:60%;">
@@ -301,6 +293,6 @@ async def stream_video(chat_id: str, message_id: int, range: str = Header(None))
         return HTMLResponse(f"Streaming error: {e}", status_code=500)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    uvicorn.run("khan:app", host="0.0.0.0", port=port)
-        
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+    
