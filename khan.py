@@ -302,4 +302,5 @@ async def stream_video(chat_id: str, message_id: int, range: str = Header(None))
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    uvicorn.run("run:app", host="0.0.0.0", port=port)
+    uvicorn.run("khan:app", host="0.0.0.0", port=port)
+        
