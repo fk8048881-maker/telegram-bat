@@ -34,7 +34,7 @@ HTML_HEAD = """
         .video-card { background: #0c140d; border-radius: 12px; padding: 12px; margin: 0 16px 10px 16px; border: 1px solid #22c55e33; display: flex; justify-content: space-between; align-items: center; }
         .btn-green { background: #22c55e; color: #000000; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #070d08; border-top: 1px solid #142416; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #070d08; border-top: 1px solid #142416; display: flex; justify-around: space-around; padding: 10px 0; z-index: 1000; }
         .nav-item { color: #4b5563; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; gap: 4px; font-weight: 600; }
         .nav-item.active { color: #22c55e; font-weight: 800; }
 
@@ -103,7 +103,7 @@ async def send_otp(phone: str = Form(...), api_id: str = Form(...), api_hash: st
         return f"""<!DOCTYPE html><html>{HTML_HEAD}<body>
         <div class="auth-container"><div class="card">
             <h3 style="color:#22c55e; text-align:center; margin-bottom:10px;">Enter Telegram OTP</h3>
-            <div style="font-size:12px; color:#86efac; text-align:center; margin-bottom:12px;">OTP Telegram App par bhej diya gaya hai</div>
+            <div style="font-size:12px; color:#86efac; text-align:center; margin-bottom:12px;">OTP Telegram App par bhej दिया गया है</div>
             <form action="/verify_otp" method="post">
                 <input type="text" name="code" placeholder="Enter OTP Code" required>
                 <input type="password" name="password" placeholder="2FA Password (If active)">
@@ -441,4 +441,5 @@ async def stream_video(chat_id: str, message_id: int, range: str = Header(None))
         return HTMLResponse(f"Streaming error: {e}", status_code=500)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
